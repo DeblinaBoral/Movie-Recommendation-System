@@ -44,68 +44,14 @@ git clone https://github.com/your-username/movie-recommendation-system.git
 cd movie-recommendation-system
 pip install -r requirements.txt
 
-Usage
-Ensure your movie dataset (e.g., movies.csv) is placed in the project directory.
+---
 
-Run the Python script:
+## Usage
 
-python recommend.py
-Enter a movie name when prompted:
+1. Ensure your movie dataset (e.g., `movies.csv`) is placed in the project directory.
 
+2. Run the Python script:
 
-Enter your favorite movie: Iron Man 2
-Get a list of similar movie recommendations.
+```bash
+python movie_recommendation_system.py
 
-How It Works
-1. Load Dataset
-import pandas as pd
-df = pd.read_csv('movies.csv')
-2. Select Metadata Features
-features = ['genres', 'keywords', 'tagline', 'cast', 'director']
-for feature in features:
-    df[feature] = df[feature].fillna('')
-3. Combine Features into a Single String
-def combine_features(row):
-    return ' '.join(row[feature] for feature in features)
-
-df['combined'] = df.apply(combine_features, axis=1)
-4. Vectorize Using TF-IDF
-from sklearn.feature_extraction.text import TfidfVectorizer
-vectorizer = TfidfVectorizer()
-tfidf_matrix = vectorizer.fit_transform(df['combined'])
-5. Compute Cosine Similarity
-from sklearn.metrics.pairwise import cosine_similarity
-similarity = cosine_similarity(tfidf_matrix)
-6. Get Movie Recommendation
-import difflib
-movie_titles = df['title'].tolist()
-movie_input = input("Enter your favorite movie: ")
-matches = difflib.get_close_matches(movie_input, movie_titles)
-chosen_movie = matches[0]
-
-index = df[df['title'] == chosen_movie].index[0]
-similarity_scores = list(enumerate(similarity[index]))
-sorted_scores = sorted(similarity_scores, key=lambda x: x[1], reverse=True)
-
-print("Top 30 recommendations:")
-for i in range(1, 31):
-    print(df['title'][sorted_scores[i][0]])
-Example
-Input:
-Enter your favorite movie: Iron Man 2
-Output:
-Top 10 recommendations:
-Iron Man
-Iron Man 3
-The Avengers
-Avengers: Age of Ultron
-...
-
-scikit-learn
-
-Install them using:
-
-pip install pandas scikit-learn
-
-License
-This project is licensed under the MIT License. See the LICENSE file for details.
